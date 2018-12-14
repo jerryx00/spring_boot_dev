@@ -19,7 +19,10 @@ import cn.stylefeng.guns.core.shiro.ShiroKit;
 import cn.stylefeng.guns.core.shiro.ShiroUser;
 import cn.stylefeng.guns.core.util.JwtTokenUtil;
 import cn.stylefeng.guns.modular.system.dao.UserMapper;
+import cn.stylefeng.guns.modular.system.model.Order;
 import cn.stylefeng.guns.modular.system.model.User;
+import cn.stylefeng.guns.modular.system.service.IDeptService;
+import cn.stylefeng.guns.modular.system.service.IOrderService;
 import cn.stylefeng.roses.core.base.controller.BaseController;
 import cn.stylefeng.roses.core.reqres.response.ErrorResponseData;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
@@ -33,7 +36,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * 接口控制器提供
@@ -42,41 +47,34 @@ import java.util.HashMap;
  * @Date 2018/7/20 23:39
  */
 @RestController
-@RequestMapping("/v1/gunsApi")
-public class ApiController extends BaseController {
+@RequestMapping("/v1/order")
+public class OrderController extends BaseController {
 
     @Autowired
-    private UserMapper userMapper;
+    private IOrderService orderService;
 
     /**
-     * api登录接口，通过账号密码获取token
+     * http://localhost:8080/v1/order/getRes?username=1&password=2
      */
-    @RequestMapping("/auth")
-    public Object auth(@RequestParam("username") String username,
+    @RequestMapping("/getRes")
+    public Object getRes(@RequestParam("username") String username,
                        @RequestParam("password") String password) {
+        boolean passwordTrueFlag = false;
 
-        //封装请求账号密码为shiro可验证的token
-        UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(username, password.toCharArray());
-
-        //获取数据库中的账号密码，准备比对
-        User user = userMapper.getByAccount(username);
-
-        String credentials = user.getPassword();
-        String salt = user.getSalt();
-        ByteSource credentialsSalt = new Md5Hash(salt);
-        SimpleAuthenticationInfo simpleAuthenticationInfo = new SimpleAuthenticationInfo(
-                new ShiroUser(), credentials, credentialsSalt, "");
-
-        //校验用户账号密码
-        HashedCredentialsMatcher md5CredentialsMatcher = new HashedCredentialsMatcher();
-        md5CredentialsMatcher.setHashAlgorithmName(ShiroKit.hashAlgorithmName);
-        md5CredentialsMatcher.setHashIterations(ShiroKit.hashIterations);
-        boolean passwordTrueFlag = md5CredentialsMatcher.doCredentialsMatch(
-                usernamePasswordToken, simpleAuthenticationInfo);
-
-        if (passwordTrueFlag) {
+        if (username.equalsIgnoreCase("1")) {
             HashMap<String, Object> result = new HashMap<>();
-            result.put("token", JwtTokenUtil.generateToken(String.valueOf(user.getId())));
+            List<Order> list = new ArrayList();
+            Order order = new Order();
+            order.setName("10M流量包");
+            order.setDesc("测试");
+            list.add(order);
+            list.add(order);
+
+            result.put("price",orderService.getPrice("1"));
+            result.put("username",username);
+            result.put("password",password);
+
+            result.put("order", list);
             return result;
         } else {
             return new ErrorResponseData(500, "账号密码错误！");
