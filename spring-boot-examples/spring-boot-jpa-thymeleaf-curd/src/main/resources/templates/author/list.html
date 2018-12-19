@@ -24,15 +24,15 @@
             <th scope="row" th:text="${author.id}">1</th>
             <td th:text="${author.name}">neo</td>
 
-            <td><a th:href="@{/toEdit(id=${author.id})}">edit</a></td>
-            <td><a th:href="@{/delete(id=${author.id})}">delete</a></td>
+            <td><a th:href="@{/author/toEdit(id=${author.id})}">edit</a></td>
+            <td><a th:href="@{/author/delete(id=${author.id})}">delete</a></td>
         </tr>
         </tbody>
     </table>
 </div>
 <div class="form-group">
     <div class="col-sm-2 control-label">
-        <a href="/toAdd" th:href="@{/toAdd}" class="btn btn-info">add</a>
+        <a href="/author/toAdd" th:href="@{/author/toAdd}" class="btn btn-info">add</a>
     </div>
 </div>
 
