@@ -1,6 +1,7 @@
 package com.battcn;
 
 import com.battcn.entity.User;
+import com.battcn.entity.UserSimple;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -45,5 +46,26 @@ public class Chapter4ApplicationTests {
         log.info("[修改用户成功]\n");
         template.delete("http://localhost:" + port + "/users/{id}", userId);
         log.info("[删除用户成功]");
+    }
+
+    @Test
+    public void test2() throws Exception {
+        template.postForEntity("http://localhost:" + port + "/users", new User("user1", "pass1"), Integer.class);
+        log.info("[test2......添加用户成功]\n");
+        // TODO 如果是返回的集合,要用 exchange 而不是 getForEntity ，后者需要自己强转类型
+        ResponseEntity<List<UserSimple>> response2 = template.exchange("http://localhost:" + port + "/users", HttpMethod.GET, null, new ParameterizedTypeReference<List<UserSimple>>() {
+        });
+        String url = "http://localhost:" + port + "/users";
+        String s = template.getForObject(url, String.class);
+        log.info("[test2......查询所有,返回String] - {}\n", s);
+
+        final List<UserSimple> body = response2.getBody();
+        log.info("[test2......查询所有] - [{}]\n", body);
+        Long userId = body.get(0).getId();
+        ResponseEntity<UserSimple> response3 = template.getForEntity("http://localhost:" + port + "/users/{id}", UserSimple.class, userId);
+        log.info("[test2......主键查询] - [{}]\n", response3.getBody());
+
+        template.delete("http://localhost:" + port + "/users/{id}", userId);
+        log.info("[test2......删除用户成功]");
     }
 }
