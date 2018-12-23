@@ -17,6 +17,7 @@ public class User {
     @Column(nullable = false)
     private int age;
 
+
     public long getId() {
         return id;
     }
@@ -51,5 +52,25 @@ public class User {
     public User setAge(int age) {
         this.age = age;
         return this;
+    }
+
+    public User(String userName, String password) {
+        this.userName = userName;
+        this.password = password;
+    }
+
+    public User(Long id, String userName, String password) {
+        this.id = id;
+        this.userName = userName;
+        this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }
