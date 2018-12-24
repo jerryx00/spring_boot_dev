@@ -9,42 +9,8 @@ import javax.persistence.Id;
 import java.io.Serializable;
 
 
-@Entity
+@Data
 public class LoanUserSimple implements Serializable {
-    private static final long serialVersionUID = 1L;
-
-    public long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getTelNum() {
-        return telNum;
-    }
-
-    public String getIdNumber() {
-        return idNumber;
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
     @Id
     @Column(name = "id", nullable = false)
     private long id;

@@ -49,17 +49,6 @@ public class RestTemplateLoanUserSimpleTests {
         final List<LoanUserSimple> body1 = response2.getBody();
         log.info("[test1......查询所有LoanUserSimple] - {}\n", body1);
 
-        String url2 = "http://localhost:" + port + prefix;
-        String s = template.getForObject(url2, String.class);
-        LoanUserSimple lus = JacksonUtils.decode(s, LoanUserSimple.class);
-
-
-        ObjectMapper mapper = new ObjectMapper();
-        List<Bean> beanList = mapper.readValue(s, new TypeReference<List<Bean>>() {});
-
-
-        log.info("[test1......查询所有LoanUser,返回String] - {}\n", s);
-
         final List<LoanUserSimple> body = response2.getBody();
         log.info("[test1......查询所有LoanUserSimple] - {}\n", body);
         Long userId = body.get(0).getId();
@@ -67,6 +56,12 @@ public class RestTemplateLoanUserSimpleTests {
         String url3 = "http://localhost:" + port + prefix + "{id}";
         ResponseEntity<LoanUserSimple> response3 = template.getForEntity(url3, LoanUserSimple.class, userId);
         log.info("[test1......主键查询LoanUserSimple] - {}\n", response3.getBody());
+
+        String url2 = "http://localhost:" + port + prefix;
+        String s = template.getForObject(url2, String.class);
+        LoanUserSimple lus = JacksonUtils.decode(s, LoanUserSimple.class);
+
+        log.info("[test1......查询所有LoanUser,返回String] - {}\n", s);
 
     }
 }
