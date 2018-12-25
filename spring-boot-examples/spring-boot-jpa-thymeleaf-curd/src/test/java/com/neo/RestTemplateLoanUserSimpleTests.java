@@ -59,7 +59,7 @@ public class RestTemplateLoanUserSimpleTests {
 
         String url2 = "http://localhost:" + port + prefix;
         String s = template.getForObject(url2, String.class);
-        LoanUserSimple lus = JacksonUtils.decode(s, LoanUserSimple.class);
+        LoanUserSimple lus = JacksonUtils.jsonToBean(s, LoanUserSimple.class);
 
         log.info("[test1......查询所有LoanUser,返回String] - {}\n", s);
 

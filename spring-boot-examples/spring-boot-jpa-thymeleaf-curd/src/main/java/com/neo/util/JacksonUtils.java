@@ -1,65 +1,66 @@
 package com.neo.util;
 
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
+import java.util.Map;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.JsonParseException;
-import org.codehaus.jackson.JsonParser;
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
 
-import lombok.extern.slf4j.Slf4j;
 /**
  * @Description:
  * @author :******| paranoia_zk@yeah.net
  * @date ：2017年6月8日 上午10:32:04
  */
-@Slf4j
+
 public class JacksonUtils {
-    private final static ObjectMapper objectMapper = new ObjectMapper();
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    static {
-        objectMapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
-        objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
-        objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
-        objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
-        objectMapper.configure(JsonParser.Feature.INTERN_FIELD_NAMES, true);
-        objectMapper.configure(JsonParser.Feature.CANONICALIZE_FIELD_NAMES, true);
-        objectMapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    public static String beanToJson(Object obj) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(obj);
     }
 
-    public static String encode(Object obj) {
-        try {
-            return objectMapper.writeValueAsString(obj);
-        } catch (JsonGenerationException e) {
-            log.error("encode(Object)", e); //$NON-NLS-1$
-        } catch (JsonMappingException e) {
-            log.error("encode(Object)", e); //$NON-NLS-1$
-        } catch (IOException e) {
-            log.error("encode(Object)", e); //$NON-NLS-1$
+    public static ObjectMapper createObjectMapper(){
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT, true);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+
+        //增加属性名全部转为小写
+        objectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CASE);
+        return objectMapper;
+    }
+
+    public static <T> T jsonToBean(String json, Class<T> cls) throws IOException {
+        if(StringUtils.isEmpty(json)){
+            return null;
         }
-        return null;
+        ObjectMapper objectMapper = createObjectMapper();
+        return objectMapper.readValue(json, cls);
     }
 
-    /**
-     * 将json string反序列化成对象
-     *
-     * @param json
-     * @param valueType
-     * @return
-     */
-    public static <T> T decode(String json, Class<T> valueType) {
-        try {
-            return objectMapper.readValue(json, valueType);
-        } catch (JsonParseException e) {
-            log.error("decode(String, Class<T>)", e);
-        } catch (JsonMappingException e) {
-            log.error("decode(String, Class<T>)", e);
-        } catch (IOException e) {
-            log.error("decode(String, Class<T>)", e);
+    public static String mapToJson(Map<String, String> map) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(map);
+    }
+
+    public static String toPrettyString(final Object value) throws IOException {
+        if(value == null){
+            return null;
         }
-        return null;
+        final ObjectMapper objectMapper = createObjectMapper();
+        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(value);
     }
 
+    private JacksonUtils(){
+
+    }
 }
