@@ -16,8 +16,8 @@ import java.util.Map;
 
 /**
  * @Description:
- * @author :******| paranoia_zk@yeah.net
- * @date ：2017年6月8日 上午10:32:04
+ * @author :******| xugp
+ * @date ：2018年12月25日 上午10:32:04
  */
 
 public class JacksonUtils {

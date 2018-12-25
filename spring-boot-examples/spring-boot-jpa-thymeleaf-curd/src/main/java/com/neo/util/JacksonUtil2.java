@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
  * @date ：2017年6月8日 上午10:32:04
  */
 @Slf4j
-public class JacksonUtil {
+public class JacksonUtil2 {
     private final static ObjectMapper objectMapper = new ObjectMapper();
 
     static {

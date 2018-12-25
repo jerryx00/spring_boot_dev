@@ -57,11 +57,14 @@ public class RestTemplateLoanUserSimpleTests {
         ResponseEntity<LoanUserSimple> response3 = template.getForEntity(url3, LoanUserSimple.class, userId);
         log.info("[test1......主键查询LoanUserSimple] - {}\n", response3.getBody());
 
-        String url2 = "http://localhost:" + port + prefix;
-        String s = template.getForObject(url2, String.class);
+        String s = template.getForObject(url3, String.class, userId);
         LoanUserSimple lus = JacksonUtils.jsonToBean(s, LoanUserSimple.class);
+        log.info("[test1......主键查询JacksonUtils->LoanUserSimple] - {}\n", lus.toString());
 
-        log.info("[test1......查询所有LoanUser,返回String] - {}\n", s);
+        String url2 = "http://localhost:" + port + prefix;
+
+
+        log.info("[test1......查询所有List<LoanUser>,返回String] - {}\n", s);
 
     }
 }
