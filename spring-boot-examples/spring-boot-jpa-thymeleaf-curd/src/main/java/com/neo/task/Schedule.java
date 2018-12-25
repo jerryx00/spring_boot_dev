@@ -4,6 +4,7 @@ import com.neo.entity.User;
 import com.neo.repository.UserRepository;
 import com.neo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,10 @@ import java.util.Date;
 @Component
 public class Schedule
 {
+
+    @Value("${scheduled.enable}")
+    private String scheduledEnable;
+
     public final static long ONE_Minute =  60 * 1000;
 
     @Autowired
@@ -38,6 +43,9 @@ public class Schedule
 
     @Scheduled(fixedRate = 6000)  //表示6秒执行一次
     public void cronJob2(){
+        if(!Boolean.parseBoolean(scheduledEnable)){
+            return;
+        }
 //        User u = userService.findUserById(1);
         User u = userRepository.findById(1);
         System.out.println((new Date())+" >>>>cron执行...." + u.toString());
