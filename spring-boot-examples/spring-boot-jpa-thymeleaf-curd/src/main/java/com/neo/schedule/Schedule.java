@@ -1,4 +1,4 @@
-package com.neo.task;
+package com.neo.schedule;
 
 import com.neo.entity.User;
 import com.neo.repository.UserRepository;

@@ -20,7 +20,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -58,14 +57,10 @@ public class RestTemplateLoanUserSimpleTests {
         ResponseEntity<LoanUserSimple> response3 = template.getForEntity(url3, LoanUserSimple.class, userId);
         log.info("[test1......主键查询LoanUserSimple] - {}\n", response3.getBody());
 
-        String s = template.getForObject(url3, String.class, userId);
-        LoanUserSimple lus = JacksonUtils.jsonToBean(s, LoanUserSimple.class);
-        log.info("[test1......主键查询JacksonUtils->LoanUserSimple] - {}\n", lus.toString());
-
         String url2 = "http://localhost:" + port + prefix;
-//        List<LoanUserSimple> lusList = JacksonUtils.jsonToBean(s, ArrayList<LoanUserSimple>.class);
+        String s = template.getForObject(url2, String.class);
+        LoanUserSimple lus = JacksonUtils.jsonToBean(s, LoanUserSimple.class);
 
-        log.info("[test1......查询所有List<LoanUser>,返回String] - {}\n", s);
-
+        log.info("[test1......查询所有LoanUser,返回String] - {}\n", s);
     }
 }
