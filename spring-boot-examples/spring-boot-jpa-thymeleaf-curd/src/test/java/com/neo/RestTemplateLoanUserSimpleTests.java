@@ -62,6 +62,5 @@ public class RestTemplateLoanUserSimpleTests {
         LoanUserSimple lus = JacksonUtils.jsonToBean(s, LoanUserSimple.class);
 
         log.info("[test1......查询所有LoanUser,返回String] - {}\n", s);
-
     }
 }
