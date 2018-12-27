@@ -16,7 +16,7 @@ import java.util.Date;
 public class Schedule
 {
 
-    @Value("${scheduled.enable}")
+    @Value("${scheduled.enable.user.query}")
     private String scheduledEnable;
 
     public final static long ONE_Minute =  60 * 1000;
