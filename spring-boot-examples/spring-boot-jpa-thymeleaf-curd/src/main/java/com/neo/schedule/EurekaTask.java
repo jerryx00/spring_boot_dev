@@ -32,6 +32,9 @@ public class EurekaTask {
     @Value("${jzt.patrol.register.maxtimes}")
     private int maxegisterTimes;
 
+    @Value("${scheduled.enable}")
+    private String scheduledEnable;
+
     @Autowired
     EurekaService eurekaService;
 
@@ -42,6 +45,9 @@ public class EurekaTask {
     // 间隔毫秒,执行任务
     @Scheduled(initialDelay = 20000, fixedDelayString = "${jzt.patrol.register.timeinms}")
     public void execRegister() {
+        if(!Boolean.parseBoolean(scheduledEnable)){
+            return;
+        }
         Date d = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss ");
         log.info("[doHeartBeat]...begin to execRegister,current time: " + sdf.format(d) + ", try times: " + registerTimes);
@@ -57,6 +63,9 @@ public class EurekaTask {
 //    @Scheduled(cron = "${jzt.patrol.heartbeat.timeinms}")
     @Scheduled(cron = "${jzt.patrol.heartbeat.cron}")
     public void execHeartBeat() {
+        if(!Boolean.parseBoolean(scheduledEnable)){
+            return;
+        }
         Date d = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss ");
         log.info("[doHeartBeat]...begin to execHeartBeat,current time: " + sdf.format(d) + ", try times: " + heatbeatTimes);
