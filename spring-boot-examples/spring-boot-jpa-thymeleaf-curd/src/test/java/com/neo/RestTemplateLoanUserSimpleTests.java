@@ -63,4 +63,14 @@ public class RestTemplateLoanUserSimpleTests {
 
         log.info("[test1......查询所有LoanUser,返回String] - {}\n", s);
     }
+
+    @Test
+    public void test2() throws Exception {
+        String url2 = "http://localhost:" + port + prefix + "{userId}";
+        String s = template.getForObject(url2, String.class, 1000);
+        log.info("[test2......查询单个LoanUser String] - {}\n", s);
+        LoanUserSimple lus = JacksonUtils.jsonToBean(s, LoanUserSimple.class);
+
+        log.info("[test2......查询单个LoanUser,转为LoanUserSimple] - {}\n", s);
+    }
 }

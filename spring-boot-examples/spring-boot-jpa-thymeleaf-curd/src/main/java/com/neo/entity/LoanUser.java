@@ -3,6 +3,7 @@ package com.neo.entity;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.codehaus.jackson.annotate.JsonProperty;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -28,8 +29,10 @@ public class LoanUser implements Serializable {
     //
     private String name;
     //
+    @JsonProperty("tel_num")
     private String telNum;
     //身份证号
+    @JsonProperty("id_number")
     private String idNumber;
     //性别 [1]-男;[2]-女
     private String sex;
