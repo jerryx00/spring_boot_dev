@@ -35,6 +35,11 @@ public class EurekaTask {
     @Value("${scheduled.enable}")
     private String scheduledEnable;
 
+    @Value("${eureka.register.enabled}")
+    private boolean registerEnabled;
+
+
+
     @Autowired
     EurekaService eurekaService;
 
@@ -45,7 +50,7 @@ public class EurekaTask {
     // 间隔毫秒,执行任务
     @Scheduled(initialDelay = 20000, fixedDelayString = "${jzt.patrol.register.timeinms}")
     public void execRegister() {
-        if(!Boolean.parseBoolean(scheduledEnable)){
+        if(!registerEnabled){
             return;
         }
         Date d = new Date();
@@ -63,7 +68,7 @@ public class EurekaTask {
 //    @Scheduled(cron = "${jzt.patrol.heartbeat.timeinms}")
     @Scheduled(cron = "${jzt.patrol.heartbeat.cron}")
     public void execHeartBeat() {
-        if(!Boolean.parseBoolean(scheduledEnable)){
+        if(!registerEnabled){
             return;
         }
         Date d = new Date();

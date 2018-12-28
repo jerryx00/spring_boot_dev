@@ -1,6 +1,7 @@
 package com.neo;
 
 import com.neo.util.EurekaUtil;
+import com.neo.util.HostInfoUtil;
 import com.neo.util.IPPortUtil;
 import com.neo.util.RestTemplateUtil;
 import org.junit.Test;
@@ -26,8 +27,7 @@ public class IPPortUtilTests {
 
     private static final Logger log = LoggerFactory.getLogger(IPPortUtilTests.class);
 
-    @Test
-    public void getHostInfo(){
+    public void getIPPortUtil (){
         log.info("IP is: " + IPPortUtil.getLocalIP());
         try {
             log.info("Port is: " + IPPortUtil.getLocalPort());
@@ -36,9 +36,17 @@ public class IPPortUtilTests {
         }
         log.info("Hostname is: " + IPPortUtil.getHostName());
 
+        log.info("HostInfoUtil..." + HostInfoUtil.getHostName() + HostInfoUtil.getIp());
+
 
 //        log.info("[doHeartBeat]...httpCode: " + code + ", body:" + body);
     }
+
+    @Test
+    public void getHostInfoUtil(){
+        log.info("HostInfoUtil...hostname is: " + HostInfoUtil.getHostName() + "; IP is: " + HostInfoUtil.getIp());
+    }
+
 
 
 

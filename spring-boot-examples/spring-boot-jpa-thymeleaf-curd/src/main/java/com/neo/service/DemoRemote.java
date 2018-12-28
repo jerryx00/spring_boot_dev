@@ -13,6 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name= "demo")
 public interface DemoRemote {
 
-    @RequestMapping("/demo/demo")
-    public String demo(@RequestParam(value="name", required=false, defaultValue="Demo") String name);
+    @GetMapping("/demo/demo")
+    public String demo(@RequestParam(value="name", required=false, defaultValue="Feign") String name);
 }

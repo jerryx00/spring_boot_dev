@@ -17,7 +17,7 @@ public class Schedule
 {
 
     @Value("${scheduled.enable.user.query}")
-    private String scheduledEnable;
+    private boolean scheduledEnableQuery;
 
     public final static long ONE_Minute =  60 * 1000;
 
@@ -28,22 +28,31 @@ public class Schedule
 
     @Scheduled(fixedDelay=ONE_Minute)
     public void fixedDelayJob(){
+        if(!scheduledEnableQuery){
+            return;
+        }
         System.out.println((new Date())+" >>fixedDelay执行....");
     }
 
     @Scheduled(fixedRate=ONE_Minute)
     public void fixedRateJob(){
+        if(!scheduledEnableQuery){
+            return;
+        }
         System.out.println((new Date())+" >>fixedRate执行....");
     }
 
     @Scheduled(cron="0 15 3 * * ?")
-    public void cronJob1(){ ;
+    public void cronJob1(){
+        if(!scheduledEnableQuery){
+            return;
+        }
         System.out.println((new Date())+" >>cron执行....");
     }
 
     @Scheduled(fixedRate = 6000)  //表示6秒执行一次
     public void cronJob2(){
-        if(!Boolean.parseBoolean(scheduledEnable)){
+        if(!scheduledEnableQuery){
             return;
         }
 //        User u = userService.findUserById(1);

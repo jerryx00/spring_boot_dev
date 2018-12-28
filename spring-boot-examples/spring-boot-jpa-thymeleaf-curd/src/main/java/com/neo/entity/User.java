@@ -65,6 +65,10 @@ public class User {
         this.password = password;
     }
 
+    public User() {
+        super();
+    }
+
     @Override
     public String toString() {
         return "User{" +
