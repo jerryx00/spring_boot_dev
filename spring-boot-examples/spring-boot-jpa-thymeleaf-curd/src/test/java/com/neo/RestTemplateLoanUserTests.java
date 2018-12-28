@@ -50,7 +50,7 @@ public class RestTemplateLoanUserTests {
 
         final List<LoanUser> body = response2.getBody();
         log.info("[test2......查询所有] - [{}]\n", body);
-        Long userId = body.get(0).getId();
+        Long userId = body.get(1000).getId();
 
         String url3 = "http://localhost:" + port + prefix + "{id}";
         ResponseEntity<LoanUser> response3 = template.getForEntity(url3, LoanUser.class, userId);
