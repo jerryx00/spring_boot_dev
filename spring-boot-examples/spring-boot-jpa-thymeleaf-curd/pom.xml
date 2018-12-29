@@ -21,10 +21,10 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <exclusions>
                 <!-- 去除默认tomcat配置 -->
-                <exclusion>
+                <!--exclusion>
                     <artifactId>spring-boot-starter-tomcat</artifactId>
                     <groupId>org.springframework.boot</groupId>
-                </exclusion>
+                </exclusion-->
             </exclusions>
         </dependency>
         <!-- 引入 jetty -->
@@ -33,10 +33,10 @@
             <artifactId>spring-boot-starter-jetty</artifactId>
         </dependency-->
         <!-- 引入 undertow -->
-        <dependency>
+        <!--dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-undertow</artifactId>
-        </dependency>
+        </dependency-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
