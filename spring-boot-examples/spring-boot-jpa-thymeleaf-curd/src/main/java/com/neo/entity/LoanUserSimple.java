@@ -18,10 +18,10 @@ public class LoanUserSimple implements Serializable {
     //
     private String name;
     //
-    @JsonProperty("tel_num")
+//    @JsonProperty("tel_num")
     private String telNum;
     //身份证号
-    @JsonProperty("id_number")
+//    @JsonProperty("id_number")
     private String idNumber;
     //性别 [1]-男;[2]-女
     private String sex;

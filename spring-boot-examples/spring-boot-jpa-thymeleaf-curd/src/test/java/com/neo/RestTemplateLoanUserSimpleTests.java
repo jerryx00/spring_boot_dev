@@ -2,7 +2,12 @@ package com.neo;
 
 import com.neo.entity.LoanUser;
 import com.neo.entity.LoanUserSimple;
+import com.neo.entity.User;
+import com.neo.entity.UserSimple;
 import com.neo.util.JacksonUtils;
+import com.neo.util.JsonUtil;
+import com.neo.util.JsonUtils;
+import org.assertj.core.util.Lists;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.JavaType;
 import org.codehaus.jackson.type.TypeReference;
@@ -40,7 +45,7 @@ public class RestTemplateLoanUserSimpleTests {
 
 
     @Test
-    public void test1() throws Exception {
+    public void testJacksonUtils() throws Exception {
         String url1 = "http://localhost:" + port + prefix;
 
         // TODO 如果是返回的集合,要用 exchange 而不是 getForEntity ，后者需要自己强转类型
@@ -55,22 +60,89 @@ public class RestTemplateLoanUserSimpleTests {
 
         String url3 = "http://localhost:" + port + prefix + "{id}";
         ResponseEntity<LoanUserSimple> response3 = template.getForEntity(url3, LoanUserSimple.class, userId);
-        log.info("[test1......主键查询LoanUserSimple] - {}\n", response3.getBody());
+        log.info("[JacksonUtils......主键查询LoanUserSimple] - {}\n", response3.getBody());
 
         String url2 = "http://localhost:" + port + prefix;
         String s = template.getForObject(url2, String.class);
         LoanUserSimple lus = JacksonUtils.jsonToBean(s, LoanUserSimple.class);
 
-        log.info("[test1......查询所有LoanUser,返回String] - {}\n", s);
+        log.info("[JacksonUtils......查询所有LoanUser,返回String] - {}\n", lus);
     }
 
     @Test
-    public void test2() throws Exception {
+    public void testJacksonUtils1() throws Exception {
         String url2 = "http://localhost:" + port + prefix + "{userId}";
-        String s = template.getForObject(url2, String.class, 1000);
-        log.info("[test2......查询单个LoanUser String] - {}\n", s);
+        String s = template.getForObject(url2, String.class, 1001);
+        log.info("[testJacksonUtils1......查询单个LoanUser String] - {}\n", s);
         LoanUserSimple lus = JacksonUtils.jsonToBean(s, LoanUserSimple.class);
+        log.info("[testJacksonUtils1......JacksonUtils->查询单个LoanUser,转为LoanUserSimple] - {}\n", lus);
 
-        log.info("[test2......查询单个LoanUser,转为LoanUserSimple] - {}\n", s);
+        s = JacksonUtils.toPrettyString(s);
+        log.info("[testJacksonUtils1......toPrettyString] - {}\n", s);
     }
+
+
+    @Test
+    public void testJacksonUtilsList() throws Exception {
+        String url1 = "http://localhost:" + port + prefix;
+        String s = template.getForObject(url1, String.class);
+
+        log.info("[testJacksonUtilsList......String] - {}\n", s);
+        List<LoanUser> userListObj = JsonUtil.string2Obj(s, new TypeReference<List<LoanUser>>() {});
+        log.info("[testJacksonUtilsList.....LoanUser List] - {}\n", userListObj.toString());
+
+        List<LoanUserSimple> userListObj1 = JsonUtil.string2Obj(s, new TypeReference<List<LoanUserSimple>>() {});
+        log.info("[testJacksonUtilsList.....LoanUserSimple List] - {}\n", userListObj1.toString());
+
+        List<LoanUserSimple> userListObj2 = JsonUtil.string2Obj(s,List.class,User.class);
+        log.info("[testJsonUtilString2Obj.....LoanUserSimple List] - {}\n", userListObj2.toString());
+    }
+
+
+
+
+    @Test
+    public void testJsonUtils() throws Exception {
+        String url2 = "http://localhost:" + port + prefix + "{userId}";
+        String s = template.getForObject(url2, String.class, 1001);
+        log.info("[JsonUtils......查询单个LoanUser,String] - {}\n", s);
+
+        LoanUserSimple l = JsonUtils.jsonToPojo(s, LoanUserSimple.class);
+        log.info("[JsonUtils.....JsonUtil->.查询单个LoanUser,转为LoanUserSimple] - {}\n", l);
+    }
+
+
+    @Test
+    public void testJsonUtil() throws Exception {
+        String url2 = "http://localhost:" + port + prefix + "{userId}";
+        String s = template.getForObject(url2, String.class, 1001);
+        log.info("[test3......查询单个LoanUser,String] - {}\n", s);
+
+        LoanUserSimple l = JsonUtil.string2Obj(s, LoanUserSimple.class);
+        log.info("[test3.....JsonUtil->.查询单个LoanUser,转为LoanUserSimple] - {}\n", l);
+    }
+
+    @Test
+    public void testJsonUtilString2Obj() {
+        LoanUserSimple u1 = new LoanUserSimple();
+        u1.setName("aaa");
+        u1.setId(1);
+
+        LoanUserSimple u2 = new LoanUserSimple();
+        u2.setName("bbb");u2.setId(2);
+        List<LoanUserSimple> userList = Lists.newArrayList();
+
+        userList.add(u1);
+        userList.add(u2);
+        String userListStr = JsonUtil.obj2StringPretty(userList);
+        List<LoanUserSimple> userListObj = JsonUtil.string2Obj(userListStr, new TypeReference<List<LoanUserSimple>>() {});
+        log.info("[testJsonUtilString2Obj.....JsonUtil.string2Obj-1] - {}\n", userListObj.toString());
+
+        List<User> userListObj2 = JsonUtil.string2Obj(userListStr,List.class,User.class);
+        log.info("[testJsonUtilString2Obj.....JsonUtil.string2Obj-2] - {}\n", userListObj2.toString());
+
+    }
+
+
+
 }

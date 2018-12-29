@@ -16,7 +16,7 @@ import java.util.Map;
 
 /**
  * @Description:
- * @author :******| xugp
+ * @author :xugp 推荐使用
  * @date ：2018年12月25日 上午10:32:04
  */
 
@@ -31,7 +31,7 @@ public class JacksonUtils {
     public static ObjectMapper createObjectMapper(){
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.configure(DeserializationFeature.ACCEPT_EMPTY_ARRAY_AS_NULL_OBJECT, true);
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, true);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 
         //增加属性名全部转为小写
@@ -57,7 +57,9 @@ public class JacksonUtils {
             return null;
         }
         final ObjectMapper objectMapper = createObjectMapper();
-        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(value);
+//        String s = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(value);
+        String s = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(value);
+        return s;
     }
 
     private JacksonUtils(){
