@@ -1,5 +1,6 @@
 package com.neo.service;
 
+import com.neo.entity.ResultModel;
 import com.neo.util.EurekaUtil;
 import com.neo.util.RestTemplateUtil;
 import org.slf4j.Logger;
@@ -17,7 +18,7 @@ public class EurekaService {
     @Autowired
     private RestTemplate restTemplate;
 
-    public boolean doRegistert(String strRemoteIp,String strRemotePort, String strAppId, String strPort){
+    public ResultModel doRegistert(String strRemoteIp, String strRemotePort, String strAppId, String strPort){
         String url= EurekaUtil.getRegistertUrl(strRemoteIp, strRemotePort, strAppId);
         //xxpojo是个pojo类，post请求中要放在http request body域中
         String requestBody = EurekaUtil.getPara(strRemoteIp,strRemotePort,strAppId, strPort);
@@ -33,22 +34,25 @@ public class EurekaService {
         String body = responseEntity.getBody();
         boolean isSuccess = status.is2xxSuccessful();
         log.info("[doRegistert]...httpCode: " + status + ", body:" + body);
-        return isSuccess;
+        ResultModel rm = new ResultModel(status, "", body);
+        return rm;
     }
 
-    public void doHeartBeat(String strRemoteIp,String strRemotePort, String strAppId, String strPort){
+    public ResultModel doHeartBeat(String strRemoteIp,String strRemotePort, String strAppId, String strPort){
         String instanceId = EurekaUtil.getInstanceId(strAppId, strPort);
         String heartUrlPrefix= EurekaUtil.getHeartUrlPrefix(strRemoteIp, strRemotePort);
         String heartBeatUrl = EurekaUtil.getHeartUrl(strRemoteIp, strRemotePort, strAppId, instanceId);
 
         RestTemplateUtil rtu = new RestTemplateUtil(heartBeatUrl);
         ResponseEntity<String> responseEntity = rtu.exchange(heartBeatUrl, HttpMethod.PUT, null);
+        HttpStatus status = responseEntity.getStatusCode();
         if (responseEntity == null) {
             log.info("[doHeartBeat]...responseEntity: " + responseEntity );
         } else {
-            HttpStatus status = responseEntity.getStatusCode();
             boolean isSuccess = status.is2xxSuccessful();
             log.info("[doHeartBeat]...result: " + isSuccess);
         }
+        ResultModel rm = new ResultModel(status, "", null);
+        return rm;
     }
 }

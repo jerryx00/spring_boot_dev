@@ -1,23 +1,23 @@
 package com.neo.web;
 
-import com.neo.entity.eureka.*;
+import com.neo.entity.ResultModel;
 import com.neo.service.EurekaService;
-import com.neo.util.EurekaUtil;
-import com.neo.util.JacksonUtils;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.HttpServletResponse;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @RestController
-@RequestMapping("/e")
+@RequestMapping("/eureka")
 public class EurekaController {
 
     private static final Logger log = LoggerFactory.getLogger(EurekaController.class);
@@ -37,8 +37,34 @@ public class EurekaController {
     @Autowired
     EurekaService eurekaService;
 
+    private boolean registerOk;
 
 
+    @RequestMapping(value = "/register" , method = RequestMethod.POST)
+    @ApiOperation(value="向远程eureka 服务器注册", notes="")
+    public ResultModel execRegister(
+            @RequestParam(value = "remoteIp", required = true) String strRemoteIp,
+            @RequestParam(value = "remotePort", required = true) String strRemotePort) {
+        Date d = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss ");
+        ResultModel rm = eurekaService.doRegistert(strRemoteIp, strRemotePort, strAppId, strPort);
+        log.info("EurekaTask execRegister: current time: " + sdf.format(d) + ", Register resutl: " + rm.toString());
+        return rm;
+    }
 
+
+    @RequestMapping(value = "heartbeat", method = RequestMethod.PUT)
+    @ApiOperation(value="向远程eureka 心跳", notes="")
+    public ResultModel execHeartBeat(
+            @RequestParam(value = "remoteIp", required = true) String strRemoteIp,
+            @RequestParam(value = "remotePort", required = true) String strRemotePort) {
+        Date d = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss ");
+        log.info("[doHeartBeat]...begin to execHeartBeat,current time: " + sdf.format(d));
+        ResultModel rm = eurekaService.doHeartBeat(strRemoteIp, strRemotePort, strAppId, strPort);
+        return rm;
 
     }
+
+
+}

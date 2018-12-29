@@ -2,6 +2,7 @@ package com.neo.web;
 
 import com.neo.service.DemoRemote;
 import com.neo.service.HelloRemote;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ public class ConsumerController {
     DemoRemote demoRemote;
 
     @GetMapping("/hello")
+    @ApiOperation(value="调用Feign", notes="")
     public String index(@RequestParam(value="name", required=false, defaultValue="Remote") String name) {
         log.info("run helloRemote......");
         return helloRemote.hello(name);

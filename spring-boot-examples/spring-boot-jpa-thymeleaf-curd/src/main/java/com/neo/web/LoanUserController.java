@@ -4,6 +4,7 @@ import com.neo.entity.LoanUser;
 import com.neo.entity.User;
 import com.neo.service.LoanUserService;
 import com.neo.service.UserService;
+import io.swagger.annotations.ApiOperation;
 import org.apache.log4j.LogManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class LoanUserController {
     LoanUserService userService;
 
     @RequestMapping("/")
+    @ApiOperation(value="获取全部LoanUser", notes="")
     public List listGetAll() {
        return listAll();
     }
@@ -34,6 +36,7 @@ public class LoanUserController {
     }
 
     @GetMapping("/{id}")
+    @ApiOperation(value="获取某个LoanUser", notes="参数为id")
     public LoanUser getUser(@PathVariable Long id) {
         {
             logger.info("running list method.");

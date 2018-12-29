@@ -1,5 +1,6 @@
 package com.neo.schedule;
 
+import com.neo.entity.ResultModel;
 import com.neo.service.EurekaService;
 import com.neo.web.EurekaController;
 import org.slf4j.Logger;
@@ -50,15 +51,15 @@ public class EurekaTask {
     // 间隔毫秒,执行任务
     @Scheduled(initialDelay = 20000, fixedDelayString = "${jzt.patrol.register.timeinms}")
     public void execRegister() {
-        if(!registerEnabled){
+        if(!registerEnabled || "".equals(strRemoteIp)){
             return;
         }
         Date d = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss ");
         log.info("[doHeartBeat]...begin to execRegister,current time: " + sdf.format(d) + ", try times: " + registerTimes);
         if (!registerOk && (registerTimes < maxegisterTimes)) {
-            registerOk = eurekaService.doRegistert(strRemoteIp, strRemotePort, strAppId, strPort);
-            log.info("EurekaTask execRegister: current time: " + sdf.format(d) + ", try times: " + registerTimes + ", registerStatus: " + registerOk);
+            ResultModel rm = eurekaService.doRegistert(strRemoteIp, strRemotePort, strAppId, strPort);
+            log.info("EurekaTask execRegister: current time: " + sdf.format(d) + ", try times: " + registerTimes + ", registerStatus: " + rm.getHttpStatus());
             registerTimes ++;
         }
     }
@@ -68,13 +69,13 @@ public class EurekaTask {
 //    @Scheduled(cron = "${jzt.patrol.heartbeat.timeinms}")
     @Scheduled(cron = "${jzt.patrol.heartbeat.cron}")
     public void execHeartBeat() {
-        if(!registerEnabled){
+        if(!registerEnabled || "".equals(strRemoteIp)){
             return;
         }
         Date d = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd kk:mm:ss ");
-        log.info("[doHeartBeat]...begin to execHeartBeat,current time: " + sdf.format(d) + ", try times: " + heatbeatTimes);
-        eurekaService.doHeartBeat(strRemoteIp, strRemotePort, strAppId, strPort);
+        ResultModel rm = eurekaService.doHeartBeat(strRemoteIp, strRemotePort, strAppId, strPort);
+        log.info("[doHeartBeat]...begin to execHeartBeat,current time: " + sdf.format(d) + ",result is " + rm.getHttpStatus() );
         heatbeatTimes ++;
     }
 

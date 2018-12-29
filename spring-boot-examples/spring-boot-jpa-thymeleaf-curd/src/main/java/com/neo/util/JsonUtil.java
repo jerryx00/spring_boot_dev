@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
  *
  * @author
  * @create 2017-11-25 2:18 PM
+ * xugp 推荐使用
  **/
 public class JsonUtil {
 
